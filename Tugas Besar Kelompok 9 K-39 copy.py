@@ -12,10 +12,9 @@
 
 # Deskripsi : Program simulasi sistem parkir otomatis dengan metode pembayaran non tunai
 
-# KAMUS
 
+# [1] Inisialisasi data user
 
-# [1] Identifikasi pengguna
 print("============== Pengisian Data ==================")
 verifikasi = False
 while verifikasi == False:
@@ -67,8 +66,8 @@ while verifikasi == False:
         print("Perbaiki data: ")
 
 
-#### Program Utama
 # [2] Penampilan layar parking gate (masuk)
+
 print("================================================")
 print("               Selamat Datang!                  ")
 print("     Silahkan Tap Kartu Member atau E-money     ")
@@ -92,18 +91,11 @@ while True:
     else:
         print("Metode masuk tidak diketahui.")
 
-while True:
-    jam_masuk = int(input("> Jam masuk: "))
-    if jam_masuk >= 0 and jam_masuk <= 24:
-        break
-
-
 print()
 print("================================================")
 print("                 Gate Terbuka                   ")
 print("                Silahkan Masuk                  ")
 print("================================================")
-print("Anda masuk pukul :", f"{jam_masuk}:00")
 print("Jenis Kendaraan  :", jenis_kendaraan)
 print("Metode masuk     :", metode_masuk)
 print("================================================")
@@ -112,26 +104,30 @@ print()
 # [3] Penentuan tarif parkir & pembayaran
 
 while True:
-    jam_keluar = int(input("> Jam keluar: "))
-    if jam_keluar >= 0 and jam_keluar <= 24:
+    try: 
+        waktu_parkir = float(input("> Lama waktu parkir (dalam jam): "))
         break
+    except ValueError: 
+        print("Masukkan lama waktu parkir dalam jam")
 
-waktu_parkir = jam_keluar - jam_masuk
-tarif_parkir = 0
 
 # Tarif mobil
 if jenis_kendaraan == "mobil":
     if waktu_parkir == 1:
         tarif_parkir = 5000
     if waktu_parkir > 1:
-        tarif_parkir = 5000 + (waktu_parkir - 1)*3000
+        tarif_parkir = 5000 + ((waktu_parkir // 1) - 1)*3000
 
 # Tarif motor
 if jenis_kendaraan == "motor":
     if waktu_parkir == 1:
         tarif_parkir = 3000
     if waktu_parkir > 1:
-        tarif_parkir = 3000 + (waktu_parkir - 1)*2000
+        tarif_parkir = 3000 + ((waktu_parkir // 1) - 1)*2000
+
+# formatting waktu parkir
+jam = int(waktu_parkir // 1)
+menit = int((waktu_parkir % 1 * 60))
 
 if metode_masuk == "member":
     print()
@@ -139,8 +135,7 @@ if metode_masuk == "member":
     print("                 Gate Terbuka                  ")
     print("                 Selamat Jalan                  ")
     print("================================================")
-    print("Anda keluar pukul:", f"{jam_keluar}:00")
-    print("Waktu parkir     :", f"{waktu_parkir} jam")
+    print("Waktu parkir     :", f"{jam} jam {menit} menit")
     print("Jenis Kendaraan  :", jenis_kendaraan)
     print("Metode masuk     :", metode_masuk)
     print("Tarif Pakir      : Rp0,00")
@@ -150,12 +145,12 @@ else:
     print("================================================")
     print("                 Gate Tertutup                  ")
     print("================================================")
-    print("Anda keluar pukul:", f"{jam_keluar}:00")
-    print("Waktu parkir     :", f"{waktu_parkir} jam")
+    print("Waktu parkir     :", f"{jam} jam {menit} menit")
     print("Jenis Kendaraan  :", jenis_kendaraan)
     print("Metode masuk     :", metode_masuk)
-    print("Tarif Pakir      :", f"Rp{tarif_parkir}")
+    print("Tarif Pakir      :", f"Rp{int(tarif_parkir)},00")
     print("================================================")
+    print()
 
     while True:
         tap = input("> Tap emoney? (y/n) ").strip().lower()
@@ -168,17 +163,16 @@ else:
             # pengisian ulang saldo
             print("Saldo anda tidak cukup. Silahkan isi ulang saldo.")
             saldo_emoney = saldo_emoney + int(input("Isi ulang saldo sebesar: "))
-            print(f"Saldo anda sekarang: Rp{saldo_emoney}")
+            print(f"Saldo anda sekarang: Rp{saldo_emoney},00")
         print()
         print("================================================")
         print("                 Gate Terbuka                  ")
         print("                 Selamat Jalan                  ")
         print("================================================")
-        print("Anda keluar pukul:", f"{jam_keluar}:00")
-        print("Waktu parkir     :", f"{waktu_parkir} jam")
+        print("Waktu parkir     :", f"{jam} jam {menit} menit")
         print("Jenis Kendaraan  :", jenis_kendaraan)
         print("Metode masuk     :", metode_masuk)
-        print("Tarif Pakir      :", f"Rp{tarif_parkir}")
-        print("Sisa saldo       :", f"Rp{saldo_emoney - tarif_parkir}")
+        print("Tarif Pakir      :", f"Rp{int(tarif_parkir)},00")
+        print("Sisa saldo       :", f"Rp{int(saldo_emoney - tarif_parkir)},00")
         print("================================================")
 
